@@ -48,6 +48,7 @@ app.use((0, cors_1.default)());
 app.use((0, express_1.json)());
 app.use(express_1.default.static(path.join(__dirname, "../static/profile")));
 app.use(express_1.default.static(path.join(__dirname, "../static/articles")));
+app.use(express_1.default.static(path.join(__dirname, "../static/articles/content")));
 app.use('/api', router_1.router);
 app.use(errorHandler);
 const port = process.env.PORT;

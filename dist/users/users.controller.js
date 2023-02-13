@@ -6,6 +6,16 @@ class UsersController {
     static async findAll(req, res, next) {
         res.json(await users_service_1.UsersService.findAll());
     }
+    static async findOneByPk(req, res, next) {
+        try {
+            const { id } = req.params;
+            const foundUser = await users_service_1.UsersService.findOneByPk(+id);
+            res.json(foundUser);
+        }
+        catch (e) {
+            next(e);
+        }
+    }
     static async create(req, res, next) {
         try {
             const { email, password } = req.body;

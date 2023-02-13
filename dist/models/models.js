@@ -36,7 +36,7 @@ ArticlesLikes.init({
     userId: { type: sequelize_1.DataTypes.INTEGER, allowNull: false, references: { model: User, key: 'id' } },
     articleId: { type: sequelize_1.DataTypes.INTEGER, allowNull: false, references: { model: Article, key: 'id' } }
 }, { sequelize: db_1.sequelize });
-User.hasMany(Article, { foreignKey: 'userId' });
+User.hasMany(Article, { foreignKey: 'userId', as: 'articles' });
 Article.belongsTo(User, { foreignKey: 'userId' });
 Subject.hasMany(Article, { foreignKey: 'subjectId' });
 Article.belongsTo(Subject, { foreignKey: 'subjectId' });

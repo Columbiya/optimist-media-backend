@@ -84,6 +84,16 @@ class ArticlesController {
             next(e);
         }
     }
+    static async writeArticleImage(req, res, next) {
+        try {
+            const { image } = req.files;
+            const fileName = await articles_service_1.ArticlesService.writeArticleImage(image);
+            res.json({ success: true, file: { url: `http://localhost:5000/${fileName}` } });
+        }
+        catch (e) {
+            next(e);
+        }
+    }
     static async edit(req, res, next) {
         try {
             const { text, title, userId, subjectId } = req.body;

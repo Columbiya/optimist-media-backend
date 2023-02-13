@@ -23,6 +23,7 @@ app.use(cors())
 app.use(json())
 app.use(Express.static(path.join(__dirname, "../static/profile")))
 app.use(Express.static(path.join(__dirname, "../static/articles")))
+app.use(Express.static(path.join(__dirname, "../static/articles/content")))
 app.use('/api', router)
 app.use(errorHandler)
 

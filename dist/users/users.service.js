@@ -32,9 +32,23 @@ const models_1 = __importDefault(require("../models/models"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const files_service_1 = require("../utils/files.service");
 const path = __importStar(require("path"));
+const ROLES_1 = require("../utils/ROLES");
 class UsersService {
     static async findAll() {
         return models_1.default.User.findAll();
+    }
+    static async findOneByPk(id) {
+        if (!id) {
+            throw ApiError_1.ApiError.badRequest("Не указан ID пользователя");
+        }
+        const candidate = await models_1.default.User.findByPk(id, { attributes: ['username', 'email', 'id', 'profilePhoto'], include: [{
+                    model: models_1.default.Article,
+                    as: 'articles'
+                }] });
+        if (!candidate) {
+            throw ApiError_1.ApiError.badRequest("Пользователя с таким ID не существует");
+        }
+        return candidate;
     }
     static async create(email, password) {
         if (!email || !password) {
@@ -47,7 +61,7 @@ class UsersService {
         const salt = 10;
         const hashedPassword = await bcrypt_1.default.hash(password, salt);
         const newUser = await models_1.default.User.create({ email, password: hashedPassword });
-        return { id: newUser.id, email: newUser.email };
+        return { id: newUser.id, email: newUser.email, isAdmin: newUser.role === ROLES_1.ROLES.ADMIN };
     }
     static async findOne(id) {
         if (!id) {

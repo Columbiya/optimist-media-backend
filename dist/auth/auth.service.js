@@ -8,6 +8,7 @@ const users_service_1 = require("../users/users.service");
 const jwt_service_1 = require("../utils/jwt.service");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const ApiError_1 = require("../error/ApiError");
+const ROLES_1 = require("../utils/ROLES");
 class AuthService {
     static async login(email, password) {
         const candidate = await users_service_1.UsersService.findOneByEmail(email);
@@ -18,7 +19,8 @@ class AuthService {
             return {
                 user: {
                     id: candidate.id,
-                    email: candidate.email
+                    email: candidate.email,
+                    isAdmin: candidate.role === ROLES_1.ROLES.ADMIN
                 },
                 token, refreshToken
             };
@@ -38,8 +40,8 @@ class AuthService {
         await jwt_service_1.JwtService.verify(token);
         const user = await jwt_service_1.JwtService.decode(token);
         return {
-            token: await jwt_service_1.JwtService.sign(user.username, user.id),
-            refreshToken: await jwt_service_1.JwtService.sign(user.username, user.id, true)
+            token: await jwt_service_1.JwtService.sign(user.email, user.id),
+            refreshToken: await jwt_service_1.JwtService.sign(user.email, user.id, true)
         };
     }
 }

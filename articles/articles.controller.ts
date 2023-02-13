@@ -92,6 +92,17 @@ export class ArticlesController {
         }
     }
 
+    static async writeArticleImage(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { image } = req.files as any
+
+            const fileName = await ArticlesService.writeArticleImage(image)
+            res.json({success: true, file: {url: `http://localhost:5000/${fileName}`}})
+        } catch(e) {
+            next(e)
+        }
+    }
+
     static async edit(req: Request, res: Response, next: NextFunction) {
         try {
             const { text, title, userId, subjectId } = req.body

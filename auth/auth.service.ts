@@ -2,6 +2,7 @@ import { UsersService } from "../users/users.service";
 import { JwtPayload, JwtService } from "../utils/jwt.service";
 import bcrypt from 'bcrypt'
 import { ApiError } from "../error/ApiError";
+import { ROLES } from "../utils/ROLES";
 
 export class AuthService {
     static async login(email: string, password: string) {
@@ -15,7 +16,8 @@ export class AuthService {
             return {
                 user: {
                     id: candidate.id,
-                    email: candidate.email
+                    email: candidate.email,
+                    isAdmin: candidate.role === ROLES.ADMIN
                 },
                 token, refreshToken
             }
@@ -40,8 +42,8 @@ export class AuthService {
         const user = await JwtService.decode(token) as JwtPayload
 
         return {
-            token: await JwtService.sign(user.username, user.id),
-            refreshToken: await JwtService.sign(user.username, user.id, true)
+            token: await JwtService.sign(user.email, user.id),
+            refreshToken: await JwtService.sign(user.email, user.id, true)
         }
     }
 }

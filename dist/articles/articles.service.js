@@ -101,6 +101,13 @@ class ArticlesService {
         }
         return createdArticle;
     }
+    static async writeArticleImage(image) {
+        if (!image) {
+            throw ApiError_1.ApiError.badRequest('Картинка не была предоставлена');
+        }
+        const fileName = await files_service_1.FilesService.writeFile(image, path.resolve(__dirname, "../../static/articles/content"));
+        return fileName;
+    }
     static async edit(article) {
         if (!article.id) {
             throw ApiError_1.ApiError.badRequest("No id specified");

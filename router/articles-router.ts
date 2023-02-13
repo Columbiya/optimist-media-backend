@@ -11,3 +11,4 @@ articlesRouter.post('/get-likes-amount/:articleId', ArticlesController.getLikesF
 articlesRouter.post('/unlike', ArticlesController.unlikeArticle)
 articlesRouter.post('/get-like', ArticlesController.getLike)
 articlesRouter.put('/:id', ArticlesController.viewArticle)
+articlesRouter.post('/set-articles-image', ArticlesController.writeArticleImage)

@@ -94,7 +94,7 @@ ArticlesLikes.init({
 }, {sequelize})
 
 
-User.hasMany(Article, {foreignKey: 'userId'})
+User.hasMany(Article, {foreignKey: 'userId', as: 'articles'})
 Article.belongsTo(User, {foreignKey: 'userId'})
 
 Subject.hasMany(Article, {foreignKey: 'subjectId'})

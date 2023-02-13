@@ -3,10 +3,28 @@ import models from "../models/models";
 import bcrypt from 'bcrypt'
 import { FilesService } from "../utils/files.service";
 import * as path from 'path'
+import { ROLES } from "../utils/ROLES";
 
 export class UsersService {
     static async findAll() {
         return models.User.findAll()
+    }
+    
+    static async findOneByPk(id: number) {
+        if (!id) {
+            throw ApiError.badRequest("Не указан ID пользователя")
+        }
+
+        const candidate = await models.User.findByPk(id, {attributes: ['username', 'email', 'id', 'profilePhoto'], include: [{
+            model: models.Article,
+            as: 'articles'
+        }]})
+
+        if (!candidate) {
+            throw ApiError.badRequest("Пользователя с таким ID не существует")
+        }
+
+        return candidate
     }
 
     static async create(email: string, password: string) {
@@ -25,7 +43,7 @@ export class UsersService {
 
         const newUser = await models.User.create({email, password: hashedPassword})
 
-        return {id: newUser.id, email: newUser.email}
+        return {id: newUser.id, email: newUser.email, isAdmin: newUser.role === ROLES.ADMIN}
     }
 
     static async findOne(id?: number) {

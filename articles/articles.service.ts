@@ -102,6 +102,15 @@ export class ArticlesService {
         return createdArticle
     }
 
+    static async writeArticleImage(image: File) {
+        if (!image) {
+            throw ApiError.badRequest('Картинка не была предоставлена')
+        }
+
+        const fileName = await FilesService.writeFile(image, path.resolve(__dirname, "../../static/articles/content"))
+        return fileName
+    }
+
     static async edit(article: Partial<ArticleAttributes>) {
         if (!article.id) {
             throw ApiError.badRequest("No id specified")

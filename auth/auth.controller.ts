@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { JwtService } from "../utils/jwt.service";
+import { UsersService } from "../users/users.service";
+import { JwtPayload, JwtService } from "../utils/jwt.service";
+import { ROLES } from "../utils/ROLES";
 import { AuthService } from "./auth.service";
 
 export class AuthController {
@@ -50,8 +52,11 @@ export class AuthController {
             console.log(token, authorization)
 
             JwtService.verify(token || "")
+            const user = JwtService.decode(token as string) as JwtPayload
 
-            res.json({status: true, user: JwtService.decode(token as string)})
+            const candidate = await UsersService.findOne(user.id)
+
+            res.json({status: true, user: {...user, isAdmin: candidate.role === ROLES.ADMIN}})
         } catch(e) {
             next(e)
         }

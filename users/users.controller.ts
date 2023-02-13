@@ -6,6 +6,18 @@ export class UsersController {
         res.json(await UsersService.findAll())
     }
 
+    static async findOneByPk(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { id } = req.params
+
+            const foundUser = await UsersService.findOneByPk(+id)
+
+            res.json(foundUser)
+        } catch(e) {
+            next(e)
+        }
+    }
+
     static async create(req: Request, res: Response, next: NextFunction) {
         try {
             const { email, password } = req.body
