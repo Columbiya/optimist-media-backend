@@ -13,3 +13,4 @@ exports.articlesRouter.post('/unlike', articles_controller_1.ArticlesController.
 exports.articlesRouter.post('/get-like', articles_controller_1.ArticlesController.getLike);
 exports.articlesRouter.put('/:id', articles_controller_1.ArticlesController.viewArticle);
 exports.articlesRouter.post('/set-articles-image', articles_controller_1.ArticlesController.writeArticleImage);
+exports.articlesRouter.delete('/:id', articles_controller_1.ArticlesController.delete);
