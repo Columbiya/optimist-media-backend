@@ -71,7 +71,7 @@ class Article extends Model<ArticleAttributes, Optional<ArticleAttributes, 'id' 
 Article.init({
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, allowNull: false},
     title: {type: DataTypes.STRING, allowNull: false, unique: true},
-    text: {type: DataTypes.STRING, allowNull: false},
+    text: {type: DataTypes.TEXT('long'), allowNull: false},
     subjectId: {type: DataTypes.INTEGER, allowNull: false, references: {model: Subject, key: 'id'}},
     userId: {type: DataTypes.INTEGER, allowNull: false, references: {model: User, key: 'id'}},
     articleImage: {type: DataTypes.STRING, allowNull: true},

@@ -24,7 +24,7 @@ class Article extends sequelize_1.Model {
 Article.init({
     id: { type: sequelize_1.DataTypes.INTEGER, primaryKey: true, autoIncrement: true, allowNull: false },
     title: { type: sequelize_1.DataTypes.STRING, allowNull: false, unique: true },
-    text: { type: sequelize_1.DataTypes.STRING, allowNull: false },
+    text: { type: sequelize_1.DataTypes.TEXT('long'), allowNull: false },
     subjectId: { type: sequelize_1.DataTypes.INTEGER, allowNull: false, references: { model: Subject, key: 'id' } },
     userId: { type: sequelize_1.DataTypes.INTEGER, allowNull: false, references: { model: User, key: 'id' } },
     articleImage: { type: sequelize_1.DataTypes.STRING, allowNull: true },
