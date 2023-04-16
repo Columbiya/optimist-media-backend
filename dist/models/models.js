@@ -36,6 +36,15 @@ ArticlesLikes.init({
     userId: { type: sequelize_1.DataTypes.INTEGER, allowNull: false, references: { model: User, key: 'id' } },
     articleId: { type: sequelize_1.DataTypes.INTEGER, allowNull: false, references: { model: Article, key: 'id' } }
 }, { sequelize: db_1.sequelize });
+class Comment extends sequelize_1.Model {
+}
+Comment.init({
+    id: { type: sequelize_1.DataTypes.INTEGER, autoIncrement: true, unique: true, primaryKey: true },
+    replyToId: { type: sequelize_1.DataTypes.INTEGER, allowNull: true, references: { model: User, key: 'id' } },
+    authorId: { type: sequelize_1.DataTypes.INTEGER, allowNull: false, references: { model: User, key: 'id' } },
+    text: { type: sequelize_1.DataTypes.TEXT('long'), allowNull: false },
+    articleId: { type: sequelize_1.DataTypes.INTEGER, allowNull: false, references: { model: Article, key: 'id' } }
+}, { sequelize: db_1.sequelize });
 User.hasMany(Article, { foreignKey: 'userId', as: 'articles' });
 Article.belongsTo(User, { foreignKey: 'userId' });
 Subject.hasMany(Article, { foreignKey: 'subjectId' });
@@ -44,9 +53,14 @@ User.hasMany(ArticlesLikes, { foreignKey: 'userId' });
 ArticlesLikes.belongsTo(ArticlesLikes, { foreignKey: 'userId' });
 Article.hasMany(ArticlesLikes, { foreignKey: 'articleId' });
 ArticlesLikes.belongsTo(ArticlesLikes, { foreignKey: 'articleId' });
+Article.hasMany(Comment, { foreignKey: 'articleId' });
+Comment.belongsTo(Article, { foreignKey: 'articleId' });
+User.hasMany(Comment, { foreignKey: 'userId', as: 'comments' });
+Comment.belongsTo(User, { foreignKey: 'authorId' });
 exports.default = {
     Article,
     Subject,
     User,
-    ArticlesLikes
+    ArticlesLikes,
+    Comment
 };

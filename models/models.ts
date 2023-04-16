@@ -1,6 +1,7 @@
 import { DataTypes, ForeignKey, Model, Optional } from 'sequelize'
 import { sequelize } from "../db";
 import { ROLES } from '../utils/ROLES';
+import { Nullable } from '../utils/types';
 
 interface UserAttributes {
     id: number
@@ -93,6 +94,29 @@ ArticlesLikes.init({
     articleId: {type: DataTypes.INTEGER, allowNull: false, references: {model: Article, key: 'id'}}
 }, {sequelize})
 
+interface CommentAttributes {
+    id: number
+    replyToId: Nullable<number>
+    articleId: number
+    text: string
+    authorId: number
+}
+
+class Comment extends Model<CommentAttributes, CommentAttributes> {
+    declare id: number
+    declare replyToId: Nullable<number>
+    declare articleId: number
+    declare text: string
+    declare authorId: number
+}
+
+Comment.init({
+    id: {type: DataTypes.INTEGER, autoIncrement: true, unique: true, primaryKey: true},
+    replyToId: {type: DataTypes.INTEGER, allowNull: true, references: {model: User, key: 'id'}},
+    authorId: {type: DataTypes.INTEGER, allowNull: false, references: {model: User, key: 'id'}},
+    text: {type: DataTypes.TEXT('long'), allowNull: false},
+    articleId: {type: DataTypes.INTEGER, allowNull: false, references: {model: Article, key: 'id'}}
+}, {sequelize})
 
 User.hasMany(Article, {foreignKey: 'userId', as: 'articles'})
 Article.belongsTo(User, {foreignKey: 'userId'})
@@ -106,9 +130,16 @@ ArticlesLikes.belongsTo(ArticlesLikes, {foreignKey: 'userId'})
 Article.hasMany(ArticlesLikes, {foreignKey: 'articleId'})
 ArticlesLikes.belongsTo(ArticlesLikes, {foreignKey: 'articleId'})
 
+Article.hasMany(Comment, {foreignKey: 'articleId'})
+Comment.belongsTo(Article, {foreignKey: 'articleId'})
+
+User.hasMany(Comment, {foreignKey: 'userId', as: 'comments'})
+Comment.belongsTo(User, {foreignKey: 'authorId'})
+
 export default {
     Article,
     Subject,
     User,
-    ArticlesLikes
+    ArticlesLikes,
+    Comment
 }
